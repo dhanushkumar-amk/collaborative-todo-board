@@ -1,18 +1,38 @@
-// src/App.jsx
-import { Routes, Route } from 'react-router-dom';
+// App.jsx
+import { useContext, useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import AuthForm from './components/AuthLogin';
 import LandingPage from './pages/LandingPage';
 import TodoPage from './pages/TodoPage';
+import AuthLogin from './components/AuthLogin';
+import { Toaster } from 'react-hot-toast';
+import { AppContext } from './context/AppContext';
 
 export default function App() {
+  const [showLogin, setShowLogin] = useState(false);
+  const { isLoggedIn, handleLogout } = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const handleLogoutAndRedirect = () => {
+    handleLogout();
+    navigate('/');
+  };
+
   return (
     <>
-      <Navbar />
+      <Toaster position="top-right" reverseOrder={false} />
+
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        onLoginClick={() => setShowLogin(true)}
+        onLogoutClick={handleLogoutAndRedirect}
+      />
+
+      {showLogin && <AuthLogin onClose={() => setShowLogin(false)} />}
+
       <Routes>
-        <Route path="/login" element={<AuthForm />} />
-        <Route path='/'element={<LandingPage/>} />
-        <Route path='/todoListPage'element={<TodoPage/>} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/todoListPage" element={<TodoPage />} />
       </Routes>
     </>
   );

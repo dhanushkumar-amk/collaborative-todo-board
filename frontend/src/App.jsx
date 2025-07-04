@@ -32,7 +32,7 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/todoListPage" element={<TodoPage />} />
+        <Route path="/todoListPage" element={<TodoPage/>} />
       </Routes>
     </>
   );
